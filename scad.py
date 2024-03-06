@@ -3,6 +3,17 @@ import opsc
 import oobb
 import oobb_base
 
+#notes
+## tray depth is depth minus a clearance_bottom
+
+clearance_tray_edges = 0
+clearance_bottom = 1
+clearance_bottom_tray = clearance_bottom
+clearance_wall = 1 #thickness of the walls
+
+
+###### old variables
+
 clearance_design = 1
 cd = clearance_design
 clearance_wall = 1 #thickness of the walls
@@ -27,7 +38,7 @@ width_latch = els + width_latch_inside + cd + els + width_latch_knob + cd + els 
 diameter_hinge_inside = 15 - 2 - clearance_wall
 diameter_hinge_bottom = 12
 diameter_latch_bottom = 15
-diameter_latch_knob = 13
+diameter_latch_knob = 11
 
 gap_between_lid_and_wall = 0.75
 thickness_lid_wall_exterior = 1.5
@@ -42,12 +53,12 @@ def main(**kwargs):
 def make_scad(**kwargs):
     parts = []
 
-    #run_fast_fast = True
-    run_fast_fast = False
-    
-    #run_fast = True
     run_fast = False
+    run_fast_fast = False
 
+    #run_fast = True
+    run_fast_fast = True
+    
     # save_type variables
     if True:
         filter = ""
@@ -86,53 +97,54 @@ def make_scad(**kwargs):
         part_default["full_shift"] = [0, 0, 0]
         part_default["full_rotations"] = [0, 0, 0]
         
+        # trays
+        if True:    
+            tray_sizes = []
+            if run_fast:
+                tray_sizes.append({"width": 3, "height": 3})
+            if run_fast_fast:
+                tray_sizes.append({"width": 2, "height": 2})
 
-        # tray layout
-        sizes = []
-        for i in range(1, 4):
-            pass
-            if not run_fast and not run_fast_fast:
-                sizes.append({"width": i, "height": i})        
-                
-        if not run_fast and not run_fast_fast:
-            sizes.append({"width": 5, "height": 2}) 
-            sizes.append({"width": 4, "height": 2})
-            sizes.append({"width": 3, "height": 2})             
-            sizes.append({"width": 2, "height": 1})            
-            sizes.append({"width": 4, "height": 3})
-        
-        if run_fast_fast:
-            sizes.append({"width": 2, "height": 1})             
-        if run_fast:        
-            sizes.append({"width": 3, "height": 3})
-
-        # tray size individual                  
-        trays = []        
-        if run_fast_fast:
-            trays.append({"width": 2, "height": 2})
-        if run_fast:
-            trays.append({"width": 3, "height": 3})
-        
-        if not run_fast and not run_fast_fast:
-            trays.append({"width": 2, "height": 2})   
-            trays.append({"width": 3, "height": 2})   
-            trays.append({"width": 3, "height": 3})
-        
-        # thickness
-        if run_fast_fast:
-            thicknesses = [15]
-        if run_fast:
-            thicknesses = [15,25]
-        if not run_fast and not run_fast_fast:
-            thicknesses = [15,20,25,30]
             
+            thicknesses = [12,24]
+
+            sizes_complete = []
+            for size in tray_sizes:            
+                    for thickness in thicknesses:
+                        sizes_complete.append({"width": size["width"], "height": size["height"], "thickness": thickness})
+
+            for size in sizes_complete:
+                part = copy.deepcopy(part_default)
+                p3 = copy.deepcopy(kwargs)
+                #p3["thickness"] = 6
+                part["kwargs"] = p3
+                w = size["width"]
+                h = size["height"]
+                p3["width"] = w
+                p3["height"] =  h
+                p3["extra"] = extra 
+                p3["thickness"] = size["thickness"]
+                part["name"] = "tray"
+                parts.append(part)                
+        """
+
+        #main_bodies
+        if True:
+            main_body_widths = []
+            main_body_heights = []
+
+            thicknesses = [12,24]
+        if run_fast:
+            main_body_widths = [9]
+            main_body_heights = [9]
+            thicknesses = [12]
+        if run_fast_fast:
+            main_body_widths = [4]
+            main_body_heights = [2]
+            thicknesses = [24]
+
         
 
-        sizes_complete = []
-        for size in sizes:
-            for tray in trays:
-                for thickness in thicknesses:
-                    sizes_complete.append({"width": size["width"], "height": size["height"], "width_tray": tray["width"], "height_tray" : tray["height"], "thickness": thickness})
 
 
         for size in sizes_complete:
@@ -196,6 +208,8 @@ def make_scad(**kwargs):
             part["name"] = "lid"
             part["kwargs"]["thickness"] = clearance_lid # depth_lid
             parts.append(part)
+
+        """
 
         part = copy.deepcopy(part_default)
         p3 = copy.deepcopy(kwargs)
@@ -1442,42 +1456,68 @@ def get_main_body_pots(thing, **kwargs):
         #get_latch_bottom(thing, **p4)
 
 def get_main_body_pots_basic(thing, **kwargs):
-    depth = kwargs.get("thickness", 4)
+    thickness = kwargs.get("thickness", 4)
     width = kwargs.get("width", 10)
-    height = kwargs.get("height", 10)
-    prepare_print = kwargs.get("prepare_print", False)
+    height = kwargs.get("height", 10)    
     pos = kwargs.get("pos", [0, 0, 0])
 
-    width_tray = kwargs.get("width_tray", 8)
-    height_tray = kwargs.get("height_tray", 8)
-    width_tray_tray = width * width_tray
-    kwargs["width_tray_tray"] = width_tray_tray
-    width_tray_tray_mm = width_tray_tray * 15
-    kwargs["width_tray_tray_mm"] = width_tray_tray_mm
-    height_tray_tray = height * height_tray
-    kwargs["height_tray_tray"] = height_tray_tray
-    height_tray_tray_mm = height_tray_tray * 15
-    kwargs["height_tray_tray_mm"] = height_tray_tray_mm
+    depth = thickness + clearance_bottom
 
-
-
-    # add pockets
-    pocket_array = []   
-    
+    #main block
+    p3 = copy.deepcopy(kwargs)
+    p3["type"] = "p"
+    p3["shape"] = f"rounded_rectangle"
+    p3["depth"] = depth
+    p3["width"] = width * 15
+    p3["height"] = height * 15
+    p3["radius"] = 5
     pos1 = copy.deepcopy(pos)
-    pos1[0] += 0
-    pos1[1] += 0
-    pocket = {}
-    pocket["position"] = pos1
-    pocket["width"] = width * width_tray
-    pocket["height"] = height * height_tray
-    pocket["depth"] = depth * 2
-    pocket_array.append(pocket)
-
-    kwargs["pocket_array"] = pocket_array
-    get_main_body_array_pots(thing, **kwargs)
+    p3["pos"] = pos1
+    p3["m"] = "#"
+    oobb_base.append_full(thing,**p3)
 
 
+def get_tray(thing, **kwargs):
+    thickness = kwargs.get("thickness", 4)
+    width = kwargs.get("width", 10)
+    height = kwargs.get("height", 10)    
+    pos = kwargs.get("pos", [0, 0, 0])
+
+    depth = thickness
+
+    #main block
+    p3 = copy.deepcopy(kwargs)
+    p3["type"] = "p"
+    p3["shape"] = f"rounded_rectangle"
+    
+    w = width * 15
+    h = height * 15 
+    d = depth
+    size = [w, h, d]
+    p3["size"] = size
+    p3["radius"] = 5
+    pos1 = copy.deepcopy(pos)
+    p3["pos"] = pos1
+    #p3["m"] = "#"
+    oobb_base.append_full(thing,**p3)
+
+    #hollow out tray
+    p3 = copy.deepcopy(kwargs)
+    p3["type"] = "n"
+    p3["shape"] = f"rounded_rectangle"
+    w = width * 15 - clearance_wall * 2
+    h = height * 15 - clearance_wall * 2
+    d = depth - clearance_bottom_tray
+    size = [w, h, d]
+    p3["size"] = size
+    p3["radius"] = 5 - clearance_wall
+    pos1 = copy.deepcopy(pos)
+    pos1[2] += clearance_bottom_tray
+    p3["pos"] = pos1
+    p3["m"] = "#"
+    oobb_base.append_full(thing,**p3)
+
+        
 
 ###### utilities
 
