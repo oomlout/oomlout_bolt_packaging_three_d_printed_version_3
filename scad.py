@@ -114,7 +114,7 @@ def make_scad(**kwargs):
                 tray_sizes.append({"width": 2, "height": 2})
 
             
-            thicknesses = [12,21,24]
+            thicknesses = [12,18,21,24]
 
             sizes_complete = []
             for size in tray_sizes:            
