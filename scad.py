@@ -809,7 +809,7 @@ def get_latch_top(thing, **kwargs):
     pos1[1] += extra_lid_overhang/2 + (height * 15) / 2
     pos1[2] += depth/2 - depth_lid_overhang
     p3["pos"] = pos1
-    p3["m"] = "#"
+    #p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
 
     # add hole
@@ -993,7 +993,6 @@ def get_lid_basic(thing, **kwargs):
     #p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
     
-    """
     p4 = copy.deepcopy(p3)
     p4["type"] = "negative"
     p4["extra"] = "interior"
@@ -1002,9 +1001,9 @@ def get_lid_basic(thing, **kwargs):
     size[2] += extra_up
     pos1 = p4["pos"]
     pos1[2] -= extra_up
-    p4["m"] = "#"
+    #p4["m"] = "#"
     oobb_base.append_full(thing,**p4)
-    """
+    
 
 
 
