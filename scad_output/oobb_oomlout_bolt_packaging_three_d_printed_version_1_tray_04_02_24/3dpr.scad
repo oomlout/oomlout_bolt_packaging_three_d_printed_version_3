@@ -19,19 +19,19 @@ difference() {
 		}
 	}
 	union() {
-		translate(v = [0, 0, 1]) {
+		translate(v = [0, 0, 2]) {
 			#hull() {
 				translate(v = [-25.0000000000, 10.0000000000, 0]) {
-					cylinder(h = 23, r = 4);
+					cylinder(h = 22, r = 2);
 				}
 				translate(v = [25.0000000000, 10.0000000000, 0]) {
-					cylinder(h = 23, r = 4);
+					cylinder(h = 22, r = 2);
 				}
 				translate(v = [-25.0000000000, -10.0000000000, 0]) {
-					cylinder(h = 23, r = 4);
+					cylinder(h = 22, r = 2);
 				}
 				translate(v = [25.0000000000, -10.0000000000, 0]) {
-					cylinder(h = 23, r = 4);
+					cylinder(h = 22, r = 2);
 				}
 			}
 		}

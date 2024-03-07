@@ -8,9 +8,9 @@ import oobb_base
 
 clearance_tray_edges = 0 #clearance for each tray
 clearance_tray_main = 1 #clearance for an entire tray
-clearance_bottom = 1
+clearance_bottom = 2 # thickness of the bottom of the tray
 clearance_bottom_tray = clearance_bottom
-clearance_wall = 1 #thickness of the walls
+clearance_wall = 3 #thickness of the walls
 clearance_lid = 2
 
 depth_lid_overhang = 3
@@ -1190,7 +1190,7 @@ def make_scad_generic(part):
 
 def get_variable(name,height=None):
     if name == "shift_hinge_y":
-        return height * 15 / 2 + clearance_wall + 7.5
+        return height * 15 / 2 + clearance_wall + 7.5  
 
 
 
