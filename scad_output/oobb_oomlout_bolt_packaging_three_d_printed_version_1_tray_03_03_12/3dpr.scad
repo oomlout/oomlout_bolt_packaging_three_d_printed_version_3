@@ -22,16 +22,16 @@ difference() {
 		translate(v = [0, 0, 2]) {
 			#hull() {
 				translate(v = [-17.5000000000, 17.5000000000, 0]) {
-					cylinder(h = 10, r = 2);
+					cylinder(h = 10, r = 4);
 				}
 				translate(v = [17.5000000000, 17.5000000000, 0]) {
-					cylinder(h = 10, r = 2);
+					cylinder(h = 10, r = 4);
 				}
 				translate(v = [-17.5000000000, -17.5000000000, 0]) {
-					cylinder(h = 10, r = 2);
+					cylinder(h = 10, r = 4);
 				}
 				translate(v = [17.5000000000, -17.5000000000, 0]) {
-					cylinder(h = 10, r = 2);
+					cylinder(h = 10, r = 4);
 				}
 			}
 		}

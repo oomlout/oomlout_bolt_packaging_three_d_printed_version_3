@@ -11,6 +11,7 @@ clearance_tray_main = 1 #clearance for an entire tray
 clearance_bottom = 2 # thickness of the bottom of the tray
 clearance_bottom_tray = clearance_bottom
 clearance_wall = 3 #thickness of the walls
+clearance_wall_tray = 1 #thickness of the walls
 clearance_lid = 2
 
 depth_lid_overhang = 3
@@ -1137,12 +1138,12 @@ def get_tray(thing, **kwargs):
     p3 = copy.deepcopy(kwargs)
     p3["type"] = "n"
     p3["shape"] = f"rounded_rectangle"
-    w = width * 15 - clearance_wall * 2
-    h = height * 15 - clearance_wall * 2
+    w = width * 15 - clearance_wall_tray * 2
+    h = height * 15 - clearance_wall_tray * 2
     d = depth - clearance_bottom_tray
     size = [w, h, d]
     p3["size"] = size
-    p3["radius"] = 5 - clearance_wall
+    p3["radius"] = 5 - clearance_wall_tray
     pos1 = copy.deepcopy(pos)
     pos1[2] += clearance_bottom_tray
     p3["pos"] = pos1
