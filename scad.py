@@ -315,6 +315,7 @@ def get_hinge(thing, **kwargs):
     pos1 = copy.deepcopy(pos)
     pos1[0] += 30
     p3["pos"] = pos1
+    p3["depth_lid"] = 2
     get_hinge_top(thing, **p3)
 
 def get_hinge_bottom(thing, **kwargs):
@@ -487,7 +488,7 @@ def get_hinge_top(thing, **kwargs):
 
     # variable
     clearance_design = kwargs.get("clearance_design", 0.5)
-    depth_lid = kwargs.get("depth_lid", 3)
+    depth_lid = kwargs.get("depth_lid", None)
 
     #add main cylinder
     p3 = copy.deepcopy(kwargs)
@@ -919,6 +920,7 @@ def get_lid(thing, **kwargs):
         p4 = copy.deepcopy(p3)
         p4["screw_rotation"] = screw_rotation
         p4["pos"] = pos1
+        p4["depth_lid"] = depth
         get_hinge_top(thing, **p4)
         screw_rotation = not screw_rotation
 
@@ -988,7 +990,7 @@ def get_lid_basic(thing, **kwargs):
     p3["pos"] = pos1
     p3["radius"] = rad
     p3["wall_thickness"] = thickness_lid_wall_exterior
-    p3["m"] = "#"
+    #p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
     
     """
