@@ -13,8 +13,12 @@ clearance_bottom_tray = clearance_bottom
 clearance_wall = 1 #thickness of the walls
 clearance_lid = 2
 
+depth_lid_overhang = 3
+
 gap_between_lid_and_wall = 0.75
 thickness_lid_wall_exterior = 1.5
+
+
 
 ###### old variables
 
@@ -35,9 +39,9 @@ width_latch_knob = 5
 els = extra_latch_side
 
 extra_for_30_mm_bolt_clearance = 12
-extra = extra_for_30_mm_bolt_clearance
 
-width_latch = els + width_latch_inside + cd + els + width_latch_knob + cd + els + width_latch_inside + cd + extra
+
+width_latch = els + width_latch_inside + cd + els + width_latch_knob + cd + els + width_latch_inside + cd + extra_for_30_mm_bolt_clearance
 
 diameter_hinge_inside = 15 - 2 - clearance_wall
 diameter_hinge_bottom = 12
@@ -46,7 +50,7 @@ diameter_latch_knob = 11
 
 
 extra_lid_overhang = thickness_lid_wall_exterior + gap_between_lid_and_wall
-depth_lid_overhang = 3
+
 
 
 def main(**kwargs):
@@ -58,8 +62,8 @@ def make_scad(**kwargs):
     run_fast = False
     run_fast_fast = False
 
-    #run_fast = True
-    run_fast_fast = True
+    run_fast = True
+    #run_fast_fast = True
     
     # save_type variables
     if True:
@@ -70,8 +74,8 @@ def make_scad(**kwargs):
         #filter = "latch"
         #filter = "latch_knob"
 
-        kwargs["save_type"] = "none"
-        #kwargs["save_type"] = "all"
+        #kwargs["save_type"] = "none"
+        kwargs["save_type"] = "all"
         
         kwargs["overwrite"] = True
         
@@ -124,7 +128,7 @@ def make_scad(**kwargs):
                 h = size["height"]
                 p3["width"] = w
                 p3["height"] =  h
-                p3["extra"] = extra 
+                #p3["extra"] = extra 
                 p3["thickness"] = size["thickness"]
                 part["name"] = "tray"
                 parts.append(part)                
@@ -141,7 +145,7 @@ def make_scad(**kwargs):
         if run_fast:
             main_body_widths = [9]
             main_body_heights = [9]
-            thicknesses = [12]
+            thicknesses = [24]
         if run_fast_fast:
             main_body_widths = [4]
             main_body_heights = [2]
@@ -157,7 +161,7 @@ def make_scad(**kwargs):
                     h = height
                     p3["width"] = w
                     p3["height"] =  h
-                    p3["extra"] = extra 
+                    #p3["extra"] = extra 
                     p3["thickness"] = thickness
                     part["name"] = "main_body"
                     parts.append(part)
@@ -168,7 +172,7 @@ def make_scad(**kwargs):
                 h = height
                 p3["width"] = w
                 p3["height"] =  h
-                p3["extra"] = extra 
+                #p3["extra"] = extra 
                 p3["thickness"] = 2
                 part["name"] = "lid"
                 parts.append(part)
@@ -274,14 +278,7 @@ def make_scad(**kwargs):
         parts.append(part)
 
         
-        part = copy.deepcopy(part_default)
-        p3 = copy.deepcopy(kwargs)
-        p3["thickness"] = 15
-        p3["width"] = 1
-        p3["height"] = 1
-        part["kwargs"] = p3
-        part["name"] = "latch_knob"
-        parts.append(part)
+        
 
 
         
@@ -578,6 +575,7 @@ def get_latch(thing, **kwargs):
     pos1 = copy.deepcopy(pos)
     pos1[0] += 45
     p3["pos"] = pos1
+    p3["depth_lid"] = 2
     get_latch_top(thing, **p3)
     
     p3 = copy.deepcopy(kwargs)
@@ -762,7 +760,7 @@ def get_latch_top(thing, **kwargs):
 
     # variable
     clearance_design = kwargs.get("clearance_design", 0.5)
-    depth_lid = kwargs.get("depth_lid", 3)
+    depth_lid = kwargs.get("depth_lid", None)
 
     #add main cylinder
     p3 = copy.deepcopy(kwargs)
@@ -802,15 +800,15 @@ def get_latch_top(thing, **kwargs):
     p3["type"] = "p"
     p3["shape"] = f"oobb_cube"
     w = width_latch_inside
-    h = diameter_latch_inside + extra_lid_overhang
+    h = diameter_latch_inside + extra_lid_overhang + height * 15
     d = depth_lid + depth_lid_overhang
     size = [w, h, d]
     p3["size"] = size
     pos1 = copy.deepcopy(pos)
-    pos1[1] += extra_lid_overhang/2
+    pos1[1] += extra_lid_overhang/2 + (height * 15) / 2
     pos1[2] += depth/2 - depth_lid_overhang
     p3["pos"] = pos1
-    #p3["m"] = "#"
+    p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
 
     # add hole
@@ -908,8 +906,8 @@ def get_lid(thing, **kwargs):
     p3["height"] = 2
     poss = []
     pos1 = copy.deepcopy(pos)
-    pos1[1] += height * 15 / 2 + clearance_wall + 7.5
-    pos1[2] += -7.5 - depth / 2
+    pos1[1] += get_variable("shift_hinge_y", height=height)
+    pos1[2] += -7.5
     pos11 = copy.deepcopy(pos1)
     pos11[0] += shift_hinge
     pos12 = copy.deepcopy(pos1)
@@ -928,13 +926,14 @@ def get_lid(thing, **kwargs):
     p3 = copy.deepcopy(kwargs)
     p3["thickness"] =  depth + clearance_bottom
     p3["width"] = 1
-    p3["height"] = 1
+    p3["height"] = 2
     poss = []    
     if True:
         pos1 = copy.deepcopy(pos)
-        pos1[1] += -height * 15 / 2 - clearance_wall - 7.5
-        pos1[2] += -7.5 - depth / 2
+        pos1[1] += -get_variable("shift_hinge_y", height=height)
+        pos1[2] += -7.5
         p3["pos"] = pos1
+    p3["depth_lid"] = depth
     get_latch_top(thing, **p3)
 
 def get_lid_basic(thing, **kwargs):
@@ -944,10 +943,16 @@ def get_lid_basic(thing, **kwargs):
     pos = kwargs.get("pos", [0, 0, 0])
 
     #main piece
-    width_full = width * 15 + clearance_wall * 2 + clearance_tray_main + gap_between_lid_and_wall * 2 + thickness_lid_wall_exterior * 2
-    height_full = height * 15 + clearance_wall * 2 + clearance_tray_main
+    extra_size = (clearance_wall * 2 
+                 + clearance_tray_main 
+                 + gap_between_lid_and_wall * 2 
+                 + thickness_lid_wall_exterior * 2)
+    width_full = (width * 15 
+                 + extra_size)
+    height_full = (height * 15 
+                    + extra_size )
 
-    depth = thickness + clearance_lid
+    depth = thickness + depth_lid_overhang
 
     p3 = copy.deepcopy(kwargs)
     p3["type"] = "p"
@@ -959,26 +964,45 @@ def get_lid_basic(thing, **kwargs):
     p3["size"] = size
     pos1 = copy.deepcopy(pos)
     p3["pos"] = pos1
-    p3["radius"] = 5 + clearance_wall + clearance_tray_main / 2 + gap_between_lid_and_wall  + thickness_lid_wall_exterior
+    rad = (5            
+           + clearance_wall 
+           + clearance_tray_main / 2 
+           + gap_between_lid_and_wall  
+           + thickness_lid_wall_exterior)
+    p3["radius"] = rad
     oobb_base.append_full(thing,**p3)
+    
     
     #interior hollow
     p3 = copy.deepcopy(kwargs)
-    p3["type"] = "p"
+    p3["type"] = "p"    
     p3["shape"] = f"oobb_rounded_rectangle_hollow"
+    #p3["shape"] = f"rounded_rectangle"
     w = width_full
     h = height_full
-    d = clearance_lid
+    d = depth_lid_overhang
     size = [w, h, d]
     p3["size"] = size
     pos1 = copy.deepcopy(pos)
-    pos1[2] += -clearance_bottom - clearance_lid / 2
+    pos1[2] += -depth_lid_overhang
     p3["pos"] = pos1
-    p3["radius"] = 5 + clearance_wall + clearance_tray_main / 2 + gap_between_lid_and_wall  + thickness_lid_wall_exterior
+    p3["radius"] = rad
     p3["wall_thickness"] = thickness_lid_wall_exterior
-    #p3["m"] = "#"
+    p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
-
+    
+    """
+    p4 = copy.deepcopy(p3)
+    p4["type"] = "negative"
+    p4["extra"] = "interior"
+    size = p4["size"]
+    extra_up = 5
+    size[2] += extra_up
+    pos1 = p4["pos"]
+    pos1[2] -= extra_up
+    p4["m"] = "#"
+    oobb_base.append_full(thing,**p4)
+    """
 
 
 
@@ -1008,7 +1032,7 @@ def get_main_body(thing, **kwargs):
     p3["height"] = 2
     poss = []
     pos1 = copy.deepcopy(pos)
-    pos1[1] += height * 15 / 2 + clearance_wall + 7.5
+    pos1[1] += get_variable("shift_hinge_y", height=height)
     pos1[2] += depth + clearance_bottom - 7.5
     pos11 = copy.deepcopy(pos1)
     pos11[0] += shift_hinge
@@ -1032,7 +1056,7 @@ def get_main_body(thing, **kwargs):
     poss = []    
     if True:
         pos1 = copy.deepcopy(pos)
-        pos1[1] += -height * 15 / 2 - clearance_wall - 7.5
+        pos1[1] += -get_variable("shift_hinge_y", height=height)
         pos1[2] += depth + clearance_bottom - 7.5
         p3["pos"] = pos1
     get_latch_bottom(thing, **p3)
@@ -1160,6 +1184,12 @@ def make_scad_generic(part):
         if "bunting" in thing:
             start = 0.5
         opsc.opsc_make_object(f'scad_output/{thing["id"]}/{mode}.scad', thing["components"], mode=mode, save_type=save_type, overwrite=overwrite, layers=layers, tilediff=tilediff, start=start)    
+
+def get_variable(name,height=None):
+    if name == "shift_hinge_y":
+        return height * 15 / 2 + clearance_wall + 7.5
+
+
 
 
 if __name__ == '__main__':

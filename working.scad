@@ -1,19 +1,23 @@
 
 
-file_bottom = "scad_output\\oobb_oomlout_bolt_packaging_three_d_printed_version_1_main_body_02_01_15_ex_tray_size_2_wide_2_high\\3dpr.stl";
+file_bottom = "scad_output\\oobb_oomlout_bolt_packaging_three_d_printed_version_1_main_body_09_09_24\\3dpr.stl";
 
-file_top = "scad_output\\oobb_oomlout_bolt_packaging_three_d_printed_version_1_lid_02_01_02_ex_tray_size_2_wide_2_high\\3dpr.stl";
+file_top = "scad_output\\oobb_oomlout_bolt_packaging_three_d_printed_version_1_lid_09_09_02\\3dpr.stl";
 
 
 
 //main
 if (true){
-    translate([-200,0,0]){
+    translate([-300,0,0]){
+        translate([0,-300,0]){
+            linear_extrude(height=5){text("main",size=40, font="Arial:style=Bold",halign="center",valign="center");
+        }   }
         rotate([0,0,0]){
             translate([0,0,0]){
                 bottom();
             }
-            translate([0,0,16]){
+            color("green")
+            translate([0,0,0]){
                 top();
             }
             
@@ -23,7 +27,10 @@ if (true){
 
 //intersection
 if (true){
-    translate([200,0,0]){
+    translate([300,0,0]){
+        translate([0,-300,0]){
+            linear_extrude(height=5){text("intersection",size=40, font="Arial:style=Bold",halign="center",valign="center");}
+        }
         rotate([0,0,0]){
             intersection(){
                 #bottom();
@@ -38,11 +45,15 @@ if (true){
 // lid
 if (true){
     translate([0,0,0]){
+        translate([0,-300,0]){
+            linear_extrude(height=5){
+            text("lid",size=40, font="Arial:style=Bold",halign="center",valign="center");
+        }}
         rotate([0,0,0]){
             difference(){  
                 union(){
-                    translate([-50,-50,13]){
-                        cube([100,100,1]);
+                    translate([-150,-150,24]){
+                        cube([300,300,1]);
                     }
                 }                    
                 union(){
@@ -57,7 +68,12 @@ if (true){
 
 //gap hinge
 if (true){
-    translate([0,200,0]){
+    translate([0,300,0]){
+        translate([0,300,0]){
+            linear_extrude(height=5){
+                text("gap hinge",size=40, font="Arial:style=Bold",halign="center",valign="center");
+            }}
+
         rotate([0,0,0]){
             difference(){  
                 union(){
@@ -86,7 +102,7 @@ module bottom(){
 }
 
 module top(){
-    translate([0,0,16]){
+    translate([0,0,26]){
         rotate([0,0,0]){
             import(file_top);
         }
