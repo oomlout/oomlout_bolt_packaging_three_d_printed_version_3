@@ -108,6 +108,7 @@ def make_scad(**kwargs):
             tray_sizes = []
             if run_fast:
                 tray_sizes.append({"width": 3, "height": 3})
+                tray_sizes.append({"width": 3, "height": 2})
             if run_fast_fast:
                 tray_sizes.append({"width": 2, "height": 2})
 
@@ -118,7 +119,7 @@ def make_scad(**kwargs):
             for size in tray_sizes:            
                     for thickness in thicknesses:
                         sizes_complete.append({"width": size["width"], "height": size["height"], "thickness": thickness})
-            
+
             for size in sizes_complete:
                 part = copy.deepcopy(part_default)
                 p3 = copy.deepcopy(kwargs)
