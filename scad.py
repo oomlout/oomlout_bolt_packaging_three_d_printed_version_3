@@ -154,8 +154,8 @@ def make_scad(**kwargs):
             #main_body_widths = [9]
             #main_body_heights = [9]
             #thicknesses = [24]
-            main_body_widths = [8]
-            main_body_heights = [10]
+            main_body_widths = [10]
+            main_body_heights = [8]
             thicknesses = [18]
         if run_fast_fast:
             main_body_widths = [4]
