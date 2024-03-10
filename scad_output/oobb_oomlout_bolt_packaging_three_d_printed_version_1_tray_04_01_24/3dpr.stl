@@ -1385,20 +1385,6 @@ solid OpenSCAD_Model
       vertex 29.8429 -3.74345 0
     endloop
   endfacet
-  facet normal 0.904797 -0.425843 0
-    outer loop
-      vertex 29.3815 -4.90877 24
-      vertex 29.6489 -4.34062 0
-      vertex 29.6489 -4.34062 24
-    endloop
-  endfacet
-  facet normal 0.904797 -0.425843 0
-    outer loop
-      vertex 29.6489 -4.34062 0
-      vertex 29.3815 -4.90877 24
-      vertex 29.3815 -4.90877 0
-    endloop
-  endfacet
   facet normal 0.684565 -0.728952 0
     outer loop
       vertex 28.1871 -6.35257 0
@@ -1635,6 +1621,20 @@ solid OpenSCAD_Model
       vertex 29.0451 -5.43893 0
       vertex 28.6448 -5.92274 24
       vertex 28.6448 -5.92274 0
+    endloop
+  endfacet
+  facet normal 0.904797 -0.425843 0
+    outer loop
+      vertex 29.3815 -4.90877 24
+      vertex 29.6489 -4.34062 0
+      vertex 29.6489 -4.34062 24
+    endloop
+  endfacet
+  facet normal 0.904797 -0.425843 0
+    outer loop
+      vertex 29.6489 -4.34062 0
+      vertex 29.3815 -4.90877 24
+      vertex 29.3815 -4.90877 0
     endloop
   endfacet
   facet normal 0.481772 -0.876297 0

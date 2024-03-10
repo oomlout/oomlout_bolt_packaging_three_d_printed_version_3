@@ -108,8 +108,10 @@ def make_scad(**kwargs):
         if True:    
             tray_sizes = []
             if run_fast:
-                tray_sizes.append({"width": 2, "height": 2.5})
-                tray_sizes.append({"width": 2.5, "height": 4})
+                tray_sizes.append({"width": 2.5, "height": 2})
+                tray_sizes.append({"width": 5, "height": 4})
+                tray_sizes.append({"width": 5, "height": 2})
+                tray_sizes.append({"width": 4, "height": 2.5})
                 tray_sizes.append({"width": 4, "height": 1})
                 tray_sizes.append({"width": 3, "height": 3})
                 tray_sizes.append({"width": 3, "height": 2})
