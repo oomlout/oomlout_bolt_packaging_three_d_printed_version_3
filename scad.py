@@ -112,6 +112,8 @@ def make_scad(**kwargs):
                 tray_sizes.append({"width": 3, "height": 2.5})
                 tray_sizes.append({"width": 5, "height": 2.5})
                 tray_sizes.append({"width": 5, "height": 4})
+                tray_sizes.append({"width": 6, "height": 1.5})
+                tray_sizes.append({"width": 6, "height": 1, "extra": "cutout"})
                 tray_sizes.append({"width": 6, "height": 2})
                 tray_sizes.append({"width": 6, "height": 2.5})
                 tray_sizes.append({"width": 5, "height": 2})
@@ -126,12 +128,16 @@ def make_scad(**kwargs):
                 tray_sizes.append({"width": 2, "height": 2})
 
             
-            thicknesses = [12,18,21,24]
+            #thicknesses = [12,18,21,24]
+            thicknesses = [18]
 
             sizes_complete = []
             for size in tray_sizes:            
                     for thickness in thicknesses:
-                        sizes_complete.append({"width": size["width"], "height": size["height"], "thickness": thickness})
+                        value = {"width": size["width"], "height": size["height"], "thickness": thickness}
+                        if "extra" in size:
+                            value["extra"] = size["extra"]
+                        sizes_complete.append(value)
 
             for size in sizes_complete:
                 part = copy.deepcopy(part_default)
@@ -145,6 +151,8 @@ def make_scad(**kwargs):
                 #p3["extra"] = extra 
                 p3["thickness"] = size["thickness"]
                 part["name"] = "tray"
+                if "extra" in size:
+                    part["name"] = f"tray_{size['extra']}"
                 parts.append(part)                
 
                              
@@ -1163,7 +1171,61 @@ def get_tray(thing, **kwargs):
     p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
 
+def get_tray_cutout(thing, **kwargs):
+    thickness = kwargs.get("thickness", 4)
+    width = kwargs.get("width", 10)
+    height = kwargs.get("height", 10)    
+    pos = kwargs.get("pos", [0, 0, 0])
+
+    depth = thickness
+
+    #main block
+    p3 = copy.deepcopy(kwargs)
+    p3["type"] = "p"
+    p3["shape"] = f"rounded_rectangle"
+    
+    w = width * 15
+    h = height * 15 
+    d = depth
+    size = [w, h, d]
+    p3["size"] = size
+    p3["radius"] = 5
+    pos1 = copy.deepcopy(pos)
+    p3["pos"] = pos1
+    #p3["m"] = "#"
+    oobb_base.append_full(thing,**p3)
+
+    #hollow out tray
+    p3 = copy.deepcopy(kwargs)
+    p3["type"] = "n"
+    p3["shape"] = f"rounded_rectangle"
+    w = width * 15 - clearance_wall_tray * 2
+    h = height * 15 - clearance_wall_tray * 2
+    d = depth - clearance_bottom_tray
+    size = [w, h, d]
+    p3["size"] = size
+    p3["radius"] = 5 - clearance_wall_tray
+    pos1 = copy.deepcopy(pos)
+    pos1[2] += clearance_bottom_tray
+    p3["pos"] = pos1
+    #p3["m"] = "#"
+    oobb_base.append_full(thing,**p3)
         
+
+    #add cutout
+    p3 = copy.deepcopy(kwargs)
+    p3["type"] = "n"
+    p3["shape"] = f"oobb_cube"    
+    w = 20
+    h = height * 15 + 15
+    d = depth - clearance_bottom_tray
+    size = [w, h, d]
+    p3["size"] = size
+    pos1 = copy.deepcopy(pos)
+    pos1[2] += depth - d
+    p3["pos"] = pos1
+    #p3["m"] = "#"
+    oobb_base.append_full(thing,**p3)
 
 ###### utilities
 
