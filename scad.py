@@ -66,9 +66,9 @@ def make_scad(**kwargs):
     run_fast = False
     run_fast_fast = False
 
-    #run_full = True
+    run_full = True
     #run_fast = True
-    run_fast_fast = True
+    #run_fast_fast = True
     
     # save_type variables
     if True:
@@ -80,7 +80,7 @@ def make_scad(**kwargs):
         #filter = "latch_knob"
 
         kwargs["save_type"] = "none"
-        #kwargs["save_type"] = "all"
+        kwargs["save_type"] = "all"
         
 
         #navigation = False
@@ -142,8 +142,10 @@ def make_scad(**kwargs):
                 tray_sizes.append({"width": 2, "height": 2})
 
             
-            #thicknesses = [12,18,21,24]
-            thicknesses = [18]
+            if run_full:
+                thicknesses = [12,18,21,24]
+            else:
+                thicknesses = [18]
 
             sizes_complete = []
             for size in tray_sizes:            
@@ -1191,7 +1193,7 @@ def get_tray(thing, **kwargs):
     pos1 = copy.deepcopy(pos)
     pos1[2] += clearance_bottom_tray
     p3["pos"] = pos1
-    p3["m"] = "#"
+    #p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
 
 def get_tray_cutout(thing, **kwargs):
