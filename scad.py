@@ -86,8 +86,8 @@ def make_scad(**kwargs):
         #navigation = False
         navigation = True    
 
-        #kwargs["overwrite"] = True
-        kwargs["overwrite"] = False
+        kwargs["overwrite"] = True
+        #kwargs["overwrite"] = False
         
         #kwargs["modes"] = ["3dpr", "laser", "true"]
         kwargs["modes"] = ["3dpr"]
