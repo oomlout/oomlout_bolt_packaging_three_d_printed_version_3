@@ -10,7 +10,7 @@ kwargs:
   height: 5
   modes:
   - 3dpr
-  overwrite: true
+  overwrite: false
   save_type: all
   thickness: 24
   type: oomlout_bolt_packaging_three_d_printed_version_1_tray
