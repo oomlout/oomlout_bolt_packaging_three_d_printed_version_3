@@ -80,14 +80,17 @@ def make_scad(**kwargs):
         #filter = "latch_knob"
 
         kwargs["save_type"] = "none"
-        kwargs["save_type"] = "all"
+        #kwargs["save_type"] = "all"
         
+        #doing the oomp generation in the main loop
+        #generate_oomp = False
+        generate_oomp = True
 
         #navigation = False
         navigation = True    
 
-        #kwargs["overwrite"] = True
-        kwargs["overwrite"] = False
+        kwargs["overwrite"] = True
+        #kwargs["overwrite"] = False
         
         #kwargs["modes"] = ["3dpr", "laser", "true"]
         kwargs["modes"] = ["3dpr"]
@@ -112,7 +115,14 @@ def make_scad(**kwargs):
         part_default["project_name"] = "oomlout_bolt_packaging_three_d_printed_version_1" ####### neeeds setting
         part_default["full_shift"] = [0, 0, 0]
         part_default["full_rotations"] = [0, 0, 0]
-        
+        dir = os.path.basename(os.path.dirname(__file__))
+        part_default["oomp_size"] = f""
+        part_default["oomp_color"] = ""
+        part_default["oomp_description_main"] = ""
+        part_default["oomp_description_extra"] = ""
+        part_default["oomp_manufacturer"] = ""
+        part_default["oomp_part_number"] = ""
+
         # trays
         if True:    
             tray_sizes = []
@@ -171,6 +181,13 @@ def make_scad(**kwargs):
                 part["name"] = "tray"
                 if "extra" in size:
                     part["name"] = f"tray_{size['extra']}"
+                
+                depth = size["thickness"] 
+                part["oomp_classification"] = "oobb"
+                part["oomp_type"] = "part"
+                part["oomp_size"] = f"project_github_{dir}"
+                part["oomp_color"] = "tray"
+                part["oomp_description_main"] = f"{w}_width_{h}_height_{depth}_depth"
                 parts.append(part)                
 
                              
@@ -345,6 +362,9 @@ def make_scad(**kwargs):
         sort.append("thickness")
         generate_navigation(sort = sort)
 
+    if generate_oomp:
+        for part in parts:
+            generate_oomp_routine(part)
 
 def get_hinge(thing, **kwargs):  
 
@@ -1254,6 +1274,8 @@ def get_tray_cutout(thing, **kwargs):
     #p3["m"] = "#"
     oobb_base.append_full(thing,**p3)
 
+
+
 ###### utilities
 
 
@@ -1345,6 +1367,51 @@ def generate_navigation(folder="scad_output", sort=["width", "height", "thicknes
             os.system(f"cp {folder_source} {folder_destination}")
 
 
+def generate_oomp_routine(part):
+    import os
+    import yaml
+    
+    directory_oomp = "oomp_source"
+    classsification = part.get("oomp_classification", "")
+
+    if classsification != "":
+
+        typ = part.get("oomp_type", "")
+        size = part.get("oomp_size", "")
+        color = part.get("oomp_color", "")
+        description_main = part.get("oomp_description_main", "")
+        description_extra = part.get("oomp_description_extra", "")
+
+        naming_order = ["classification", "type", "size", "color", "description_main", "description_extra"]
+
+        oomp_id = ""
+        for i in range(0, len(naming_order)):
+            val = part.get(f"oomp_{naming_order[i]}", "")
+            if val != "":
+                oomp_id += f"{val}_"
+        oomp_id = oomp_id[:-1]
+
+
+
+        folder = f"{directory_oomp}/{oomp_id}"
+
+        data = {}
+        data["id"] = oomp_id        
+        for key in naming_order:
+            data[key] = part.get(f"oomp_{key}", "")
+
+        filename = "working.yaml"
+        file_full = f"{folder}/{filename}"
+        #if it doesn't exist
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        
+        #dump to yaml file
+        print(f"making {file_full}")
+        with open(file_full, 'w') as file:
+            yaml.dump(data, file)
+    else:
+        print("no classification")
 
 if __name__ == '__main__':
     kwargs = {}

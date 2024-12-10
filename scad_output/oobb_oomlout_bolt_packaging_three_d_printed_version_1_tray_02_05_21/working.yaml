@@ -10,10 +10,18 @@ kwargs:
   height: 5
   modes:
   - 3dpr
-  overwrite: false
-  save_type: all
+  overwrite: true
+  save_type: none
   thickness: 21
   type: oomlout_bolt_packaging_three_d_printed_version_1_tray
   width: 2
 name: tray
+oomp_classification: oobb
+oomp_color: tray
+oomp_description_extra: ''
+oomp_description_main: 2_width_5_height_21_depth
+oomp_manufacturer: ''
+oomp_part_number: ''
+oomp_size: project_github_oomlout_bolt_packaging_three_d_printed_version_3
+oomp_type: part
 project_name: oomlout_bolt_packaging_three_d_printed_version_1

@@ -20,7 +20,7 @@ difference() {
 	}
 	union() {
 		translate(v = [0, 0, 2]) {
-			#hull() {
+			hull() {
 				translate(v = [-13.7500000000, 10.0000000000, 0]) {
 					cylinder(h = 22, r = 4);
 				}
