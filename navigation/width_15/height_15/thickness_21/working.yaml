@@ -1,0 +1,19 @@
+full_rotations:
+- 0
+- 0
+- 0
+full_shift:
+- 0
+- 0
+- 0
+kwargs:
+  height: 15
+  modes:
+  - 3dpr
+  overwrite: false
+  save_type: all
+  thickness: 21
+  type: oomlout_bolt_packaging_three_d_printed_version_1_tray
+  width: 15
+name: tray
+project_name: oomlout_bolt_packaging_three_d_printed_version_1

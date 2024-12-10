@@ -86,8 +86,8 @@ def make_scad(**kwargs):
         #navigation = False
         navigation = True    
 
-        kwargs["overwrite"] = True
-        #kwargs["overwrite"] = False
+        #kwargs["overwrite"] = True
+        kwargs["overwrite"] = False
         
         #kwargs["modes"] = ["3dpr", "laser", "true"]
         kwargs["modes"] = ["3dpr"]
@@ -118,8 +118,8 @@ def make_scad(**kwargs):
             tray_sizes = []
             if run_full:
                 #add 1.5 and 2.5
-                widths = [1,1.5, 2,2.5,3,4,5,6,7]
-                heights = [1,1.5,2,2.5,3,4,5,6,7]
+                widths = [1,1.5, 2,2.5,3,4,5,6,7,8,9,10,11,12,14,14,15]
+                heights = [1,1.5,2,2.5,3,4,5,6,7,8,9,10,11,12,13,14,15]
                 for width in widths:
                     for height in heights:
                         tray_sizes.append({"width": width, "height": height})
